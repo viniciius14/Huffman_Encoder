@@ -3,7 +3,7 @@
 #include <string.h>
 #include <iostream>
 #include <string>
-//test
+
 using namespace std;
 
 //tree struct
@@ -24,19 +24,39 @@ typedef struct list_struct {
 	node_t* data;
 }list_struct;
 
-void translator(node_t** temp){
+string textTranslater(node_t **temp, char i){
 	if ((*temp)->left != NULL){
 		(*(*temp)->left->path) = (*(*temp)->left->parent->path);
 		(*temp)->left->path->append("0");
 
-		translator(&(*temp)->left);
+		textTranslater(&(*temp)->left , i);
 	}
 	if ((*temp)->right != NULL){
 		(*(*temp)->right->path) = (*(*temp)->right->parent->path);
 		(*temp)->right->path->append("1");
-		translator(&(*temp)->right);
 
+		textTranslater(&(*temp)->right , i);
+	}
+
+	string tempString(1 , i);
+	if ((*temp)->left == NULL && (*temp)->right == NULL && *(*temp)->value == tempString ) {
 		
+		return *(*temp)->path;
+	}
+}
+
+void charTranslater(node_t** temp){
+	if ((*temp)->left != NULL){
+		(*(*temp)->left->path) = (*(*temp)->left->parent->path);
+		(*temp)->left->path->append("0");
+
+		charTranslater(&(*temp)->left);
+	}
+	if ((*temp)->right != NULL){
+		(*(*temp)->right->path) = (*(*temp)->right->parent->path);
+		(*temp)->right->path->append("1");
+
+		charTranslater(&(*temp)->right);
 	}
 	if ((*temp)->left == NULL && (*temp)->right == NULL) {
 		cout << "\n" << *(*temp)->value << " : " << *(*temp)->path;
@@ -48,9 +68,14 @@ void printHuffman(list_struct* head, char* argv[]) {
 
 
 	//PRINT EACH CHAR VALUE
-	translator(&head->data);
+	charTranslater(&head->data);
 
 	//PRINT THE FULL TEXT
+	FILE *fp = fopen(argv[1], "r+");
+
+	for(char i ; (i = fgetc(fp)) != EOF ; ){
+		cout << textTranslater(&head->data,i); // will return path
+	}
 
 
 }
