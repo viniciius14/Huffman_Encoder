@@ -43,6 +43,8 @@ string textTranslater(node_t **temp, char i){
 		
 		return *(*temp)->path;
 	}
+
+	return NULL;
 }
 
 void charTranslater(node_t** temp){
@@ -72,9 +74,11 @@ void printHuffman(list_struct* head, char* argv[]) {
 
 	//prints the full encoded text
 	FILE *fp = fopen(argv[1], "r+");
+	cout << "\n";
 
 	for(char i ; (i = fgetc(fp)) != EOF ; ){	//super inefficient
-		cout << textTranslater(&head->data,i); // will return path for the given letter
+		string encoded = textTranslater(&head->data,i); // will return path for the given letter
+		cout << encoded;
 	}
 
 
