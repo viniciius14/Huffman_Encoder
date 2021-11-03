@@ -67,14 +67,14 @@ void charTranslater(node_t** temp){
 void printHuffman(list_struct* head, char* argv[]) {
 
 
-	//PRINT EACH CHAR VALUE
+	//prints each character before and after encoding
 	charTranslater(&head->data);
 
-	//PRINT THE FULL TEXT
+	//prints the full encoded text
 	FILE *fp = fopen(argv[1], "r+");
 
-	for(char i ; (i = fgetc(fp)) != EOF ; ){
-		cout << textTranslater(&head->data,i); // will return path
+	for(char i ; (i = fgetc(fp)) != EOF ; ){	//super inefficient
+		cout << textTranslater(&head->data,i); // will return path for the given letter
 	}
 
 
