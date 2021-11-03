@@ -24,64 +24,59 @@ typedef struct list_struct {
 	node_t* data;
 }list_struct;
 
-string textTranslater(node_t **temp, char i){
-	if ((*temp)->left != NULL){
-		(*(*temp)->left->path) = (*(*temp)->left->parent->path);
-		(*temp)->left->path->append("0");
+string textTranslater(node_t* root, string i) {
+    if(root == NULL) {
+        return "";
+    }
 
-		textTranslater(&(*temp)->left , i);
-	}
-	if ((*temp)->right != NULL){
-		(*(*temp)->right->path) = (*(*temp)->right->parent->path);
-		(*temp)->right->path->append("1");
+    if(root->value->compare(i) == 0) {
+	    return *root->path;
+    }
 
-		textTranslater(&(*temp)->right , i);
-	}
+    string newString;
+    newString = textTranslater(root->left, i);
 
-	string tempString(1 , i);
-	if ((*temp)->left == NULL && (*temp)->right == NULL && *(*temp)->value == tempString ) {
-		
-		return *(*temp)->path;
-	}
-
-	return NULL;
+    if( newString != "") {
+        return newString;
+    }else{
+        newString = textTranslater(root->right , i);
+        return newString;
+    }
 }
 
 void charTranslater(node_t** temp){
-	if ((*temp)->left != NULL){
+    if ((*temp)->left == NULL && (*temp)->right == NULL) {
+		cout << "\n" << *(*temp)->value << " : " << *(*temp)->path;
+		return;
+	}
+	if ((*temp)->left != NULL) {
 		(*(*temp)->left->path) = (*(*temp)->left->parent->path);
 		(*temp)->left->path->append("0");
 
 		charTranslater(&(*temp)->left);
 	}
-	if ((*temp)->right != NULL){
+	if ((*temp)->right != NULL) {
 		(*(*temp)->right->path) = (*(*temp)->right->parent->path);
 		(*temp)->right->path->append("1");
 
 		charTranslater(&(*temp)->right);
 	}
-	if ((*temp)->left == NULL && (*temp)->right == NULL) {
-		cout << "\n" << *(*temp)->value << " : " << *(*temp)->path;
-		return;
-	}
 }
 
 void printHuffman(list_struct* head, char* argv[]) {
-
-
 	//prints each character before and after encoding
 	charTranslater(&head->data);
 
 	//prints the full encoded text
 	FILE *fp = fopen(argv[1], "r+");
-	cout << "\n";
+	cout << "\n\n";
 
-	for(char i ; (i = fgetc(fp)) != EOF ; ){	//super inefficient
-		string encoded = textTranslater(&head->data,i); // will return path for the given letter
+	for(char i ; (i = fgetc(fp)) != EOF ; ) {
+        string b(1,i);	//super inefficient
+		string encoded = textTranslater(head->data,b); // will return path for the given letter
 		cout << encoded;
 	}
-
-
+    fclose(fp);
 }
 
 void print_nodes(list_struct* head) {
@@ -96,18 +91,16 @@ void print_nodes(list_struct* head) {
 
 
 list_struct organizer(list_struct** head) {
-	list_struct** temp, ** temp2;
-	int temp_weight = 0, size = 0;
-	string* temp_char;
+	list_struct** temp = head, ** temp2 = head;
+    node_t* dataTemp;
 
 	//removal of any empty data pointers
-	for (temp = head; (*temp)->next != NULL; temp = &(*temp)->next) { //sqe temp != NULL
+	for (; (*temp)->next != NULL; temp = &(*temp)->next) {
 		if ((*temp)->data == NULL) {
 			if ((*temp)->prev == NULL) {//in case we want to remove head node
 				head = &(*temp)->next;
 				(*head)->prev = NULL;
-			}
-			else {
+			}else {
 				*temp2 = (*temp)->next;
 				(*temp2)->prev = (*temp)->prev;
 				(*temp)->prev = *temp2;
@@ -120,14 +113,9 @@ list_struct organizer(list_struct** head) {
 		for (temp2 = &(*temp)->next; (*temp2) != NULL; temp2 = &(*temp2)->next) {
 			if ((*temp)->data->weight > (*temp2)->data->weight) {
 
-				temp_weight = (*temp)->data->weight;
-				temp_char = (*temp)->data->value;
-
-				(*temp)->data->weight = (*temp2)->data->weight;
-				(*temp)->data->value = (*temp2)->data->value;
-
-				(*temp2)->data->weight = temp_weight;
-				(*temp2)->data->value = temp_char;
+                dataTemp = (*temp)->data;
+                (*temp)->data = (*temp2)->data;
+                (*temp2)->data = dataTemp;
 			}
 		}
 	}
@@ -135,7 +123,7 @@ list_struct organizer(list_struct** head) {
 }
 
 void create_tree(list_struct* head) {
-	list_struct* temp, * temp2, * new_node, * it;
+	list_struct* temp, * temp2, * new_node;
 	node_t* new_parent;
 	short int size = 0;
 
@@ -163,7 +151,6 @@ void create_tree(list_struct* head) {
 		temp = head;
         temp2 = temp->next;
 
-
 		if (temp != NULL && temp2 != NULL){
 			new_parent->parent = NULL;
 
@@ -182,8 +169,6 @@ void create_tree(list_struct* head) {
 			new_parent->value = new string(*temp->data->value);
 			*new_parent->value += *temp2->data->value;
 
-			cout << "\n" << *new_parent->value << "\n";
-
 			//add new tree node at the end of linked list
 			for (temp = head; ; temp = temp->next) {
 				if (temp->next == NULL) {
@@ -198,14 +183,14 @@ void create_tree(list_struct* head) {
 			head->data = NULL;
 			head->next->data = NULL;
 			*head = organizer(&head);
-            print_nodes(head);
+            //remove this comment to see all the tree iterations and their corresponding weights
+            //print_nodes(head);
 		}
 	}
 	return;
 }
 
 list_struct* linked_list(int argc, char* argv[]) {
-	//variable definitions
 	list_struct* head, * new_node,* lastNode;
 	node_t* tree_node;
 	char i;
@@ -242,7 +227,6 @@ list_struct* linked_list(int argc, char* argv[]) {
 			head->data->weight = 1;
 			head->data->value = new string(1, i);
 			lastNode = head;
-			//temp = head;
 			continue;
 		}
 		if (head != NULL)
@@ -276,9 +260,6 @@ list_struct* linked_list(int argc, char* argv[]) {
 			new_node->data->value = new string(1, i);
 			lastNode->next = new_node;
 
-			//temp->next = new_node;// connects previous node with new_node
-			//temp = temp->next;// temp is now prev of next node
-			//temp2 = new_node;
 			lastNode = new_node;
 		}
 	}
@@ -288,24 +269,25 @@ list_struct* linked_list(int argc, char* argv[]) {
 }
 
 int main(int argc, char* argv[]){
-
-	//create a linked list with all the text's elements
+	//create a linked list with all the text's characters and their respective weights
 	list_struct* connector = linked_list(argc, argv);
 
-	print_nodes(connector);
+    if(connector != NULL){
+        //remove print_nodes comment's to see the list changing troughout the program
+        //print_nodes(connector);
 
-	//organize our list from the least ocurring letter to the most and removes all empty data pointers
-	organizer(&connector);
+        //organize our list from the least ocurring letter to the most and removes all empty data pointers
+        organizer(&connector);
 
-	print_nodes(connector);
+        //print_nodes(connector);
 
-	//creates the full binary tree
-	create_tree(connector);
+        //creates the full binary tree
+        create_tree(connector);
 
-	//print_nodes(connector);
+        //print_nodes(connector);
 
-	//print the binary value of each character and the original text encoded
-	printHuffman(connector, argv);
-
+        //print the binary value of each character and the original text encoded
+        printHuffman(connector, argv);
+    }
 	return 0;
 }
