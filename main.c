@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdint.h>
 
+#include "/Headers/quicksort.h"
+
 typedef struct{
 	struct TreeNode *left; // 0
 	struct TreeNode *right; // 1
@@ -42,23 +44,22 @@ char *huffman_encode(const char *to_encode, TreeNode *root){
 int huffman_encode(const char* to_encode, TreeNode *root){
   // make a 2D array where the first row is letters in __uint8_t and second one is the number of ocurrences
   /* Example: 
-	________________
+	_________________
 	|a|b|e|f|...| | |
     |3|4|2|1|...| | |
-	‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+	‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
   */
 	size_t string_size = strlen(to_encode);	
 	// max size should be 94 because thats the max number of elems in ascii table that we can receive though text
     uint8_t letter_counter[2][string_size - 1]; 
-	memset  (letter_counter, 0, sizeof(letter_counter));
+	memset  (letter_counter, 0, sizeof letter_counter);
 	
-
     // add elements to 2D array
-	int added_elems = 0;		
+	uint8_t added_elems = 0;	
 	  
-	for(int i = 0 ; i != string_size ; i++){
-		for(int j = 0 ; j !=  string_size; j++){
-			if(letter_counter[1][j] == 0) { // means we tranversed full array and didnt find the letter 
+	for(uint8_t i = 0 ; i != string_size ; i++){
+		for(uint8_t j = 0 ; j !=  string_size; j++){
+			if(letter_counter[1][j] == 0){ // means we tranversed full array and didnt find the letter 
 				letter_counter[0][j] = (uint8_t)to_encode[i];
 				letter_counter[1][j] = 1;
 				added_elems++;
@@ -71,37 +72,25 @@ int huffman_encode(const char* to_encode, TreeNode *root){
 		}
 	}
 
-
-    for(int i = 0 ; i != added_elems ; i++){
+    printf("Entry values before sorting");
+    for(uint8_t i = 0 ; i != added_elems ; i++){
         printf("%c\t%d\n",(char)letter_counter[0][i], letter_counter[1][i]);
     }
-
-
 	
+    quicksort()
+
+
+
 	// need to sort array to get this
 	/* Example: 
-	________________
+	_________________
 	|b|a|e|f|...| | |
 	|4|3|2|1|...| | |
-	‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+	‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 	*/
-	// lazy and crappy bubble sort
-// 	for(int j = 1 ; j != added_elems ; j++){
-// 		for(int i = 1 ; i!= added_elems ; i++){
-// 			if(letter_counter[i][1] > letter_counter[i - 1][1]){
-// 				int temp_letter = letter_counter[i][0];
-// 				int temp_value = letter_counter[i][1];
-				
-// 				letter_counter[i][0] = letter_counter[i - 1][0];
-// 				letter_counter[i][1] = letter_counter[i - 1][1];
-				
-// 				letter_counter[i - 1][0] = temp_letter;
-// 				letter_counter[i - 1][1] = temp_value;
-// 			}
-// 		}
-// 	}
 
-	
+
+
 	
 }
 
