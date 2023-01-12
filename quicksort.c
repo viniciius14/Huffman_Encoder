@@ -1,33 +1,41 @@
 #ifndef QUICKSORT_C
 #define QUICKSORT_C
 
+#include "Headers/quicksort.h"
 
-void swap(int *a, int *b){
-    int t = *a;
-    *a = *b;
-    *b = t;
+void swap(uint8_t **a, uint8_t **b){
+    uint8_t temp_1 = a[0][0], temp_2 = a[0][1];
+
+    a[0][0] = b[0][0];
+    a[0][1] = b[0][1];
+
+    b[0][0] = temp_1;
+    b[0][1] = temp_2;
 }
-int partition(int array[], int low, int high){
-    int pivot = array[high];
-    int i = (low - 1);
-    for (int j = low; j < high; j++){
-        if (array[j] <= pivot){
+
+uint8_t quickSort_partition(uint8_t **array, uint8_t low, uint8_t high){
+    uint8_t pivot = array[high][1];
+    uint8_t i = (low - 1);
+    for (uint8_t j = low; j < high; j++) {
+        if (array[j][1] <= pivot) {
             i++;
-            p(&array[i], &array[j]);
+            swap(&array[i], &array[j]);
         }
     }
-    (&array[i + 1], &array[high]);
+    swap(&array[i + 1], &array[high]);
     return (i + 1);
 }
 
-void quickSort(int array[], int low, int high){
-    if (low < high){
-        int pi = partition(array, low, high);
+void quickSort_2D(uint8_t **array, uint8_t low, uint8_t high){
+    if (low < high) {
+        uint8_t pi = quickSort_partition(array, low, high);
+
         quickSort(array, low, pi - 1);
         quickSort(array, pi + 1, high);
     }
-}
 
+    printf("a");
+}
 
 
 #endif

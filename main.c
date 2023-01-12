@@ -2,44 +2,13 @@
 #include <string.h>
 #include <stdint.h>
 
-#include "/Headers/quicksort.h"
+#include "Headers/quicksort.h"
 
 typedef struct{
 	struct TreeNode *left; // 0
 	struct TreeNode *right; // 1
 	char* letters;
 }TreeNode;
-
-// struct size is 12 if on 32 bit machine
-//struct size is 20 8 per pointer + 1 (4) for the char
-// now its 24?
-
-// take note of every letter and cont its ocurrences
-
-/*
-void add_to_tree(char letter, TreeNode *root){
-	if(root->letter) 
-}
-
-
-char *huffman_encode(const char *to_encode, TreeNode *root){
-	char added_letters[64];
-	int added_elems = 0;
-	
-	for(int i = 0 ; to_encode[i] ; i++){
-		int j = 0;
-		for( ; j != added_elems ; j++){
-			if([added_letters[j] == to_encode[i]]) break;
-		}
-		added_letters[added_elems + 1] = to_encode[i];
-		added_elems++;
-		add_to_tree(to_encode[i], root);
-	}
-
-
-}
-*/
-
 
 int huffman_encode(const char* to_encode, TreeNode *root){
   // make a 2D array where the first row is letters in __uint8_t and second one is the number of ocurrences
@@ -77,10 +46,6 @@ int huffman_encode(const char* to_encode, TreeNode *root){
         printf("%c\t%d\n",(char)letter_counter[0][i], letter_counter[1][i]);
     }
 	
-    quicksort()
-
-
-
 	// need to sort array to get this
 	/* Example: 
 	_________________
@@ -88,6 +53,14 @@ int huffman_encode(const char* to_encode, TreeNode *root){
 	|4|3|2|1|...| | |
 	‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 	*/
+
+    quickSort_2D(letter_counter, 0, string_size - 1);
+
+    for(uint8_t i = 0 ; i != added_elems ; i++){
+        printf("%c\t%d\n",(char)letter_counter[0][i], letter_counter[1][i]);
+    }
+
+
 
 
 
