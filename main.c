@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 #include "Headers/quicksort.h"
 
@@ -20,7 +21,8 @@ int huffman_encode(const char* to_encode, TreeNode *root){
   */
 	size_t string_size = strlen(to_encode);	
 	// max size should be 94 because thats the max number of elems in ascii table that we can receive though text
-    uint8_t letter_counter[2][string_size - 1]; 
+    
+    uint8_t **letter_counter = (uint8_t**)malloc(2 * (string_size - 1)); 
 	memset  (letter_counter, 0, sizeof letter_counter);
 	
     // add elements to 2D array
@@ -41,6 +43,10 @@ int huffman_encode(const char* to_encode, TreeNode *root){
 		}
 	}
 
+
+
+
+
     printf("Entry values before sorting");
     for(uint8_t i = 0 ; i != added_elems ; i++){
         printf("%c\t%d\n",(char)letter_counter[0][i], letter_counter[1][i]);
@@ -54,7 +60,7 @@ int huffman_encode(const char* to_encode, TreeNode *root){
 	‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 	*/
 
-    quickSort_2D(letter_counter, 0, string_size - 1);
+    // quickSort_2D(letter_counter, 0, added_elems);
 
     for(uint8_t i = 0 ; i != added_elems ; i++){
         printf("%c\t%d\n",(char)letter_counter[0][i], letter_counter[1][i]);
