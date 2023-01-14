@@ -34,7 +34,13 @@ void linked_list_append(const char letter_to_add, LinkedListNode *list_root){
 		}
 	}
 
+	LinkedListNode *new;
+	new->next 	= NULL;
+	new->prev 	= temp;
+	new->letter = letter_to_add;
+	new->count 	= 1;
 
+	temp->next 	= new;
 
 }
 
