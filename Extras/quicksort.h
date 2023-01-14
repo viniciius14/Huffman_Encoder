@@ -3,7 +3,8 @@
 
 #include <stdio.h>
 #include <stdint.h>
-#include "../quicksort.c"
+#include "quicksort.c"
+
 
 extern unsigned char added_elems;
 

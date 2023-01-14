@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#include "Headers/quicksort.h"
+#include "Extras/quicksort.h"
 
 
 typedef struct{
@@ -36,7 +36,7 @@ int huffman_encode(const char* to_encode, TreeNode *root){
 	
 	
     // add elements to 2D array
-	added_elems = 0;	
+	added_elems = 0;
 	  
 	for(unsigned char i = 0 ; i != string_size ; i++){
 		for(unsigned char j = 0 ; j !=  string_size; j++){

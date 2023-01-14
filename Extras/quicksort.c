@@ -1,4 +1,7 @@
+#ifndef QUICKSORT_C
+#define QUICKSORT_C
 
+#include "quicksort.h"
 
 void swap(unsigned char *a, unsigned char *b){
     unsigned char letter_1 = *a, letter_2 = *b;
@@ -6,7 +9,7 @@ void swap(unsigned char *a, unsigned char *b){
     *a = c
     *b = a
     */
-   unsigned char number_1 = a + added_elems;
+   unsigned char number_1 = a + (size_t)added_elems;
 
 
 //     a[0][0] = b[0][0];
@@ -38,3 +41,7 @@ void quickSort_2D(unsigned char **array, unsigned char low, unsigned char high){
     }
 
 }
+
+
+
+#endif
