@@ -3,7 +3,6 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#include "Extras/quicksort.h"
 
 
 typedef struct{
@@ -11,6 +10,64 @@ typedef struct{
 	struct TreeNode *right; // 1
 	char* letters;
 }TreeNode;
+
+typedef struct{
+	struct LinkedListNode* next;
+	struct LinkedListNode* prev;
+	char letter;
+	uint8_t count;
+}LinkedListNode;
+
+void linked_list_append(const char letter_to_add, LinkedListNode *list_root){
+	LinkedListNode *temp = list_root;
+	// if(!list_root){
+	// 	list_root->next = NULL;
+	// 	list_root->prev = NULL;
+	// 	list_root->letter = letter_to_add;
+	// 	list_root->count = 1;		
+	// }
+
+	for( ; temp->next != NULL ; temp = temp->next){
+		if(temp->letter == letter_to_add){
+			temp->count++;
+			return;
+		}
+	}
+
+
+
+}
+
+
+
+const char* huffman_encode(const char *to_encode, TreeNode *tree_root){
+	
+	LinkedListNode *linked_list_root = calloc(1, sizeof(LinkedListNode));
+
+	for(unsigned char i = 0 ; to_encode[i] != '\0' ; i++){
+		linked_list_append(to_encode[i], linked_list_root);
+	}
+		
+	
+	
+	/*
+	itirate through every char
+		add to linked list
+
+	organize linked list
+
+	iterate through every node
+		add to tree
+	*/
+}
+
+
+
+
+
+
+
+
 
 
 
@@ -22,7 +79,8 @@ typedef struct{
 int main(void){
 
 
-    TreeNode *root;
+    TreeNode *tree_root = calloc(1, sizeof(TreeNode));
+
     /*
     const char *encoded = huffman_encode(const char*, TreeNode *root);
 
@@ -32,7 +90,7 @@ int main(void){
     */
 	
 	printf("sizeof struct TreeNode = %zu\n",sizeof(TreeNode));
-	huffman_encode("acbc", root);
+	const char *encoded_text = huffman_encode("acbcaa", tree_root);
     // printf("return from to encode = %d", );
 
 
