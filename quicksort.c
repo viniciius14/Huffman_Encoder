@@ -1,8 +1,3 @@
-#ifndef QUICKSORT_C
-#define QUICKSORT_C
-
-#include "Headers/quicksort.h"
-
 void swap(uint8_t **a, uint8_t **b){
     uint8_t temp_1 = a[0][0], temp_2 = a[0][1];
 
@@ -30,12 +25,9 @@ void quickSort_2D(uint8_t **array, uint8_t low, uint8_t high){
     if (low < high) {
         uint8_t pi = quickSort_partition(array, low, high);
 
-        quickSort(array, low, pi - 1);
-        quickSort(array, pi + 1, high);
+        quickSort_2D(array, low, pi - 1);
+        quickSort_2D(array, pi + 1, high);
     }
 
     printf("a");
 }
-
-
-#endif
