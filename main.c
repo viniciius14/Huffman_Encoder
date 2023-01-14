@@ -12,8 +12,8 @@ typedef struct{
 }TreeNode;
 
 typedef struct{
-	struct LinkedListNode* next;
-	struct LinkedListNode* prev;
+	struct LinkedListNode *next;
+	struct LinkedListNode *prev;
 	char letter;
 	uint8_t count;
 }LinkedListNode;
@@ -34,13 +34,14 @@ void linked_list_append(const char letter_to_add, LinkedListNode *list_root){
 		}
 	}
 
-	LinkedListNode *new;
+	LinkedListNode *new = (LinkedListNode*)calloc(1, sizeof(TreeNode));
 	new->next 	= NULL;
 	new->prev 	= temp;
 	new->letter = letter_to_add;
 	new->count 	= 1;
 
 	temp->next 	= new;
+	free(new);
 
 }
 
