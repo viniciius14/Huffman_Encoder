@@ -5,6 +5,7 @@
 
 #include "Headers/quicksort.h"
 
+
 typedef struct{
 	struct TreeNode *left; // 0
 	struct TreeNode *right; // 1
@@ -60,7 +61,7 @@ int huffman_encode(const char* to_encode, TreeNode *root){
 	‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
 	*/
 
-    // quickSort_2D(letter_counter, 0, added_elems);
+    quickSort_2D(letter_counter, 0, added_elems);
 
     for(uint8_t i = 0 ; i != added_elems ; i++){
         printf("%c\t%d\n",(char)letter_counter[0][i], letter_counter[1][i]);
