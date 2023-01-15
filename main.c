@@ -5,13 +5,13 @@
 
 
 
-typedef struct{
+typedef struct TreeNode{
 	struct TreeNode *left; // 0
 	struct TreeNode *right; // 1
 	char* letters;
 }TreeNode;
 
-typedef struct{
+typedef struct LinkedListNode{
 	struct LinkedListNode *next;
 	struct LinkedListNode *prev;
 	char letter;
@@ -20,12 +20,11 @@ typedef struct{
 
 void linked_list_append(const char letter_to_add, LinkedListNode *list_root){
 	LinkedListNode *temp = list_root;
-	// if(!list_root){
-	// 	list_root->next = NULL;
-	// 	list_root->prev = NULL;
-	// 	list_root->letter = letter_to_add;
-	// 	list_root->count = 1;		
-	// }
+	if(list_root->letter == '\000'){
+		list_root->letter = letter_to_add;
+		list_root->count = 1;	
+		return;	
+	}
 
 	for( ; temp->next != NULL ; temp = temp->next){
 		if(temp->letter == letter_to_add){
@@ -34,16 +33,44 @@ void linked_list_append(const char letter_to_add, LinkedListNode *list_root){
 		}
 	}
 
-	LinkedListNode *new = (LinkedListNode*)calloc(1, sizeof(TreeNode));
+	LinkedListNode *new = calloc(1, sizeof(TreeNode));
 	new->next 	= NULL;
 	new->prev 	= temp;
 	new->letter = letter_to_add;
 	new->count 	= 1;
 
 	temp->next 	= new;
-	free(new);
+
 
 }
+
+void swap_contents(LinkedListNode *a, LinkedListNode *b){
+	char temp = a->letter;
+	unsigned char temp2 = a->count;
+
+	a->letter = b->letter;
+	a->count = b->count;
+
+	b->letter = temp;
+	b->count = temp2;
+}
+
+void linked_list_order(LinkedListNode *list_root){
+	LinkedListNode *min = list_root;
+	for(LinkedListNode *temp1 = list_root ; temp1->next != NULL ; temp1 = temp1->next){
+		for(LinkedListNode *temp2 = temp1 ; temp2 != NULL ; temp2 = temp2->next){
+			if(min->count == temp2->count){
+				min = min->letter > temp2->letter ? temp2 : min;
+				continue;
+			}
+				
+			if(min->count > temp2->count) min = temp2;
+		}
+		swap_contents(temp1, min);
+	}
+}
+
+
 
 
 
@@ -55,7 +82,7 @@ const char* huffman_encode(const char *to_encode, TreeNode *tree_root){
 		linked_list_append(to_encode[i], linked_list_root);
 	}
 		
-	
+	linked_list_order(linked_list_root);
 	
 	/*
 	itirate through every char
@@ -97,7 +124,7 @@ int main(void){
     */
 	
 	printf("sizeof struct TreeNode = %zu\n",sizeof(TreeNode));
-	const char *encoded_text = huffman_encode("acbcaa", tree_root);
+	const char *encoded_text = huffman_encode("bacbccabac", tree_root);
     // printf("return from to encode = %d", );
 
 
