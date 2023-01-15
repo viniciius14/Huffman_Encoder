@@ -5,46 +5,46 @@
 
 
 
-typedef struct TreeNode{
+struct TreeNode{
 	struct TreeNode *left; // 0
 	struct TreeNode *right; // 1
 	char* letters;
-}TreeNode;
+};
 
-typedef struct LinkedListNode{
+struct LinkedListNode{
 	struct LinkedListNode *next;
 	struct LinkedListNode *prev;
 	char letter;
 	uint8_t count;
-}LinkedListNode;
+};
 
-void linked_list_append(const char letter_to_add, LinkedListNode *list_root){
-	LinkedListNode *temp = list_root;
+void linked_list_append(const char letter_to_add, struct LinkedListNode *list_root){
+	struct LinkedListNode *temp = list_root;
 	if(list_root->letter == '\000'){
 		list_root->letter = letter_to_add;
-		list_root->count = 1;	
-		return;	
+		list_root->count = 1;
+		return;
 	}
-
-	for( ; temp->next != NULL ; temp = temp->next){
+	do{
 		if(temp->letter == letter_to_add){
 			temp->count++;
 			return;
 		}
-	}
+		if(temp->next == NULL){
+			struct LinkedListNode *new = calloc(1, sizeof(struct TreeNode));
+			new->next 	= NULL;
+			new->prev 	= temp;
+			new->letter = letter_to_add;
+			new->count 	= 1;
 
-	LinkedListNode *new = calloc(1, sizeof(TreeNode));
-	new->next 	= NULL;
-	new->prev 	= temp;
-	new->letter = letter_to_add;
-	new->count 	= 1;
-
-	temp->next 	= new;
-
-
+			temp->next 	= new;
+			return;
+		}
+		temp = temp->next;
+	}while(temp != NULL);
 }
 
-void swap_contents(LinkedListNode *a, LinkedListNode *b){
+void swap_contents(struct LinkedListNode *a, struct LinkedListNode *b){
 	char temp = a->letter;
 	unsigned char temp2 = a->count;
 
@@ -55,18 +55,15 @@ void swap_contents(LinkedListNode *a, LinkedListNode *b){
 	b->count = temp2;
 }
 
-void linked_list_order(LinkedListNode *list_root){
-	LinkedListNode *min = list_root;
-	for(LinkedListNode *temp1 = list_root ; temp1->next != NULL ; temp1 = temp1->next){
-		for(LinkedListNode *temp2 = temp1 ; temp2 != NULL ; temp2 = temp2->next){
-			if(min->count == temp2->count){
-				min = min->letter > temp2->letter ? temp2 : min;
-				continue;
-			}
-				
-			if(min->count > temp2->count) min = temp2;
+void linked_list_order(struct LinkedListNode *list_root){
+	struct LinkedListNode *min = list_root;
+	//find smallest put in first position proceed repeat
+
+	for(struct LinkedListNode *temp1 = list_root ; temp1->next != NULL ; temp1=temp1->next){
+		for(struct LinkedListNode *temp2 = temp1 ; temp2 != NULL ; temp2 = temp2->next){
+			min = temp2->count < min->count ? temp2 : min;
 		}
-		swap_contents(temp1, min);
+		swap_contents(min, temp1);
 	}
 }
 
@@ -74,15 +71,23 @@ void linked_list_order(LinkedListNode *list_root){
 
 
 
-const char* huffman_encode(const char *to_encode, TreeNode *tree_root){
+const char* huffman_encode(const char *to_encode, struct TreeNode *tree_root){
 	
-	LinkedListNode *linked_list_root = calloc(1, sizeof(LinkedListNode));
+	struct LinkedListNode *linked_list_root = calloc(1, sizeof(struct LinkedListNode));
 
 	for(unsigned char i = 0 ; to_encode[i] != '\0' ; i++){
 		linked_list_append(to_encode[i], linked_list_root);
 	}
-		
+	printf("linked list before sorting\n");
+	for(struct LinkedListNode *temp = linked_list_root ; temp != NULL ; temp = temp->next){
+		printf("%c -> %d\n", temp->letter, temp->count);
+	}
 	linked_list_order(linked_list_root);
+
+	printf("linked list after sorting\n");
+	for(struct LinkedListNode *temp = linked_list_root ; temp != NULL ; temp = temp->next){
+		printf("%c -> %d\n", temp->letter, temp->count);
+	}
 	
 	/*
 	itirate through every char
@@ -113,7 +118,7 @@ const char* huffman_encode(const char *to_encode, TreeNode *tree_root){
 int main(void){
 
 
-    TreeNode *tree_root = calloc(1, sizeof(TreeNode));
+    struct TreeNode *tree_root = calloc(1, sizeof(struct TreeNode));
 
     /*
     const char *encoded = huffman_encode(const char*, TreeNode *root);
@@ -123,7 +128,7 @@ int main(void){
     const char *original = huffman_decode(const char* encoded, TreeNode *root); 
     */
 	
-	printf("sizeof struct TreeNode = %zu\n",sizeof(TreeNode));
+	printf("sizeof struct TreeNode = %zu\n",sizeof(struct TreeNode));
 	const char *encoded_text = huffman_encode("bacbccabac", tree_root);
     // printf("return from to encode = %d", );
 
