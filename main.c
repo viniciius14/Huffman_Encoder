@@ -14,19 +14,19 @@ struct TreeNode{
 struct LinkedListNode{
 	struct LinkedListNode *next;
 	struct LinkedListNode *prev;
-	char letter;
+	char *letter;
 	uint8_t count;
 };
 
 void linked_list_append(const char letter_to_add, struct LinkedListNode *list_root){
 	struct LinkedListNode *temp = list_root;
-	if(list_root->letter == '\000'){
+	if(list_root->letter == NULL){
 		list_root->letter = letter_to_add;
 		list_root->count = 1;
 		return;
 	}
 	do{
-		if(temp->letter == letter_to_add){
+		if(*temp->letter == letter_to_add){
 			temp->count++;
 			return;
 		}
@@ -34,7 +34,7 @@ void linked_list_append(const char letter_to_add, struct LinkedListNode *list_ro
 			struct LinkedListNode *new = calloc(1, sizeof(struct TreeNode));
 			new->next 	= NULL;
 			new->prev 	= temp;
-			new->letter = letter_to_add;
+			*new->letter = letter_to_add;
 			new->count 	= 1;
 
 			temp->next 	= new;
@@ -45,13 +45,13 @@ void linked_list_append(const char letter_to_add, struct LinkedListNode *list_ro
 }
 
 void swap_contents(struct LinkedListNode *a, struct LinkedListNode *b){
-	char temp = a->letter;
+	char *temp = a->letter;
 	unsigned char temp2 = a->count;
 
-	a->letter = b->letter;
+	*a->letter = *b->letter;
 	a->count = b->count;
 
-	b->letter = temp;
+	*b->letter = *temp;
 	b->count = temp2;
 }
 
@@ -67,7 +67,7 @@ void linked_list_order(struct LinkedListNode *list_root){
 	}
 }
 
-
+void create_tree(){}
 
 
 
@@ -78,17 +78,12 @@ const char* huffman_encode(const char *to_encode, struct TreeNode *tree_root){
 	for(unsigned char i = 0 ; to_encode[i] != '\0' ; i++){
 		linked_list_append(to_encode[i], linked_list_root);
 	}
-	printf("linked list before sorting\n");
-	for(struct LinkedListNode *temp = linked_list_root ; temp != NULL ; temp = temp->next){
-		printf("%c -> %d\n", temp->letter, temp->count);
-	}
+
 	linked_list_order(linked_list_root);
 
-	printf("linked list after sorting\n");
-	for(struct LinkedListNode *temp = linked_list_root ; temp != NULL ; temp = temp->next){
-		printf("%c -> %d\n", temp->letter, temp->count);
-	}
-	
+	create_tree();
+
+
 	/*
 	itirate through every char
 		add to linked list
