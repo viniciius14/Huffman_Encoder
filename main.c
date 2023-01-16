@@ -71,14 +71,45 @@ void linked_list_order(struct LinkedListNode *list_root){
 	}
 }
 
+
+void add_tree_parent(struct TreeNode *tree_root, struct LinkedListNode *first, struct LinkedListNode *second){
+
+	struct TreeNode *new_parent = calloc(1, sizeof(struct TreeNode));
+	/*
+	make new tree node
+		aglormerate everything in the double linked list
+		remove element in the linked list
+	*/
+	unsigned char new_tree_count = first->count + second->count;
+
+	char *new_tree_string;
+	strcpy(new_tree_string, first->letter);
+	strcat(new_tree_string, second->letter);
+
+	new_parent->letters = new_tree_string;
+	new_parent->right   = tree_root;
+
+
+
+}
+
+
+
+
 void create_tree(struct LinkedListNode *list_root, struct TreeNode *tree_root){
 	struct LinkedListNode *pt = list_root;
-	if(tree_root->letters == NULL){
-		tree_root->letters = pt->letter;
+	while(pt != NULL){
+		if(tree_root->letters == NULL){
+			tree_root->letters = pt->letter;
+		}
+		add_tree_parent(tree_root, pt, pt->next);
 
+
+
+		pt = pt->next;
 	}
 
-
+		
 
 }
 
@@ -110,9 +141,7 @@ const char* huffman_encode(const char *to_encode, struct TreeNode *tree_root){
 	/*
 	itirate through every char
 		add to linked list
-
 	organize linked list
-
 	iterate through every node
 		add to tree
 	*/
@@ -135,10 +164,7 @@ const char* huffman_encode(const char *to_encode, struct TreeNode *tree_root){
 
 int main(void){
 
-
     struct TreeNode *tree_root = calloc(1, sizeof(struct TreeNode));
-	
-	printf("sizeof struct TreeNode = %zu\n",sizeof(struct TreeNode));
 
 	const char *encoded_text = huffman_encode("A_DEAD_DAD_CEDED_A_BAD_BABE_A_BEADED_ABACA_BED", tree_root);
 
