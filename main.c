@@ -6,16 +6,17 @@
 
 
 struct TreeNode{
-	struct TreeNode *left; // 0
+	struct TreeNode *left; 	// 0
 	struct TreeNode *right; // 1
-	char* letters;
+	char            *letters;
+	unsigned char 	 count;
 };
 
 struct LinkedListNode{
 	struct LinkedListNode *next;
 	struct LinkedListNode *prev;
-	char *letter;
-	uint8_t count;
+	char 				  *letter;
+	uint8_t 			   count;
 };
 
 void linked_list_append(char letter_to_add, struct LinkedListNode *list_root){
@@ -71,6 +72,16 @@ void linked_list_order(struct LinkedListNode *list_root){
 	}
 }
 
+// struct TreeNode{
+// 	struct TreeNode *left; 	// 0
+// 	struct TreeNode *right; // 1
+// 	char            *letters;
+// };
+struct TreeNode *convert_to_tree(struct LinkedListNode *node){
+	struct TreeNode *new = calloc(1, sizeof(struct TreeNode));
+	strcpy(new->letters, node->letter);
+	return new;
+}
 
 void add_tree_parent(struct TreeNode *tree_root, struct LinkedListNode *first, struct LinkedListNode *second){
 
@@ -80,33 +91,34 @@ void add_tree_parent(struct TreeNode *tree_root, struct LinkedListNode *first, s
 		aglormerate everything in the double linked list
 		remove element in the linked list
 	*/
-	unsigned char new_tree_count = first->count + second->count;
-
+	struct TreeNode *new_left  = convert_to_tree(first);
+	struct TreeNode *new_right = convert_to_tree(second);
+	
 	char *new_tree_string;
 	strcpy(new_tree_string, first->letter);
 	strcat(new_tree_string, second->letter);
 
+	new_parent->left  	= new_left;
+	new_parent->right 	= new_right;
 	new_parent->letters = new_tree_string;
-	new_parent->right   = tree_root;
 
-
-
+	tree_root = new_parent;
 }
 
 
 
 
 void create_tree(struct LinkedListNode *list_root, struct TreeNode *tree_root){
-	struct LinkedListNode *pt = list_root;
-	while(pt != NULL){
+	struct LinkedListNode *list_pt = list_root;
+	while(list_pt != NULL){
 		if(tree_root->letters == NULL){
-			tree_root->letters = pt->letter;
+			tree_root->letters = list_pt->letter;
 		}
-		add_tree_parent(tree_root, pt, pt->next);
+		add_tree_parent(tree_root, list_pt, list_pt->next);
 
 
 
-		pt = pt->next;
+		list_pt = list_pt->next;
 	}
 
 		
@@ -145,6 +157,7 @@ const char* huffman_encode(const char *to_encode, struct TreeNode *tree_root){
 	iterate through every node
 		add to tree
 	*/
+	return "aaaa";
 }
 
 
