@@ -72,7 +72,11 @@ void linked_list_order(struct LinkedListNode *list_root){
 }
 
 void create_tree(struct LinkedListNode *list_root, struct TreeNode *tree_root){
-	
+	struct LinkedListNode *pt = list_root;
+	if(tree_root->letters == NULL){
+		tree_root->letters = pt->letter;
+
+	}
 
 
 
@@ -133,31 +137,16 @@ int main(void){
 
 
     struct TreeNode *tree_root = calloc(1, sizeof(struct TreeNode));
-
-    /*
-    const char *encoded = huffman_encode(const char*, TreeNode *root);
-
-    print_tree(TreeNode *root);
-
-    const char *original = huffman_decode(const char* encoded, TreeNode *root); 
-    */
 	
 	printf("sizeof struct TreeNode = %zu\n",sizeof(struct TreeNode));
+
 	const char *encoded_text = huffman_encode("A_DEAD_DAD_CEDED_A_BAD_BABE_A_BEADED_ABACA_BED", tree_root);
-    // printf("return from to encode = %d", );
 
 
-	
-	// TreeNode *root;
-	// memset(root, 1, sizeof(TreeNode));
-	
-	// char *encoded = huffman_encode("string_teste", root);
-	
+
+
+
 	return 0;
-
-
-
-
 }
 
 
