@@ -18,15 +18,16 @@ struct LinkedListNode{
 	uint8_t count;
 };
 
-void linked_list_append(const char letter_to_add, struct LinkedListNode *list_root){
+void linked_list_append(char letter_to_add, struct LinkedListNode *list_root){
 	struct LinkedListNode *temp = list_root;
 	if(list_root->letter == NULL){
-		list_root->letter = letter_to_add;
+		list_root->letter = malloc(sizeof(char));
+		*list_root->letter = letter_to_add; 
 		list_root->count = 1;
 		return;
 	}
 	do{
-		if(*temp->letter == letter_to_add){
+		if(*(temp->letter) == letter_to_add){
 			temp->count++;
 			return;
 		}
@@ -34,6 +35,7 @@ void linked_list_append(const char letter_to_add, struct LinkedListNode *list_ro
 			struct LinkedListNode *new = calloc(1, sizeof(struct TreeNode));
 			new->next 	= NULL;
 			new->prev 	= temp;
+			new->letter = malloc(sizeof(char));
 			*new->letter = letter_to_add;
 			new->count 	= 1;
 
@@ -45,29 +47,36 @@ void linked_list_append(const char letter_to_add, struct LinkedListNode *list_ro
 }
 
 void swap_contents(struct LinkedListNode *a, struct LinkedListNode *b){
-	char *temp = a->letter;
-	unsigned char temp2 = a->count;
+	char *letter = a->letter;
+	unsigned char count = a->count;
 
-	*a->letter = *b->letter;
-	a->count = b->count;
-
-	*b->letter = *temp;
-	b->count = temp2;
+	a->letter = b->letter;
+	a->count  = b->count;
+	
+	b->letter = letter;
+	b->count  = count;
 }
 
 void linked_list_order(struct LinkedListNode *list_root){
 	struct LinkedListNode *min = list_root;
-	//find smallest put in first position proceed repeat
 
-	for(struct LinkedListNode *temp1 = list_root ; temp1->next != NULL ; temp1=temp1->next){
+	for(struct LinkedListNode *temp1 = list_root ; temp1 != NULL ; temp1 = temp1->next){
 		for(struct LinkedListNode *temp2 = temp1 ; temp2 != NULL ; temp2 = temp2->next){
+			if(!min) min = temp2;
 			min = temp2->count < min->count ? temp2 : min;
 		}
-		swap_contents(min, temp1);
+
+		if(min != temp1)swap_contents(min, temp1);
+		min = NULL;
 	}
 }
 
-void create_tree(){}
+void create_tree(struct LinkedListNode *list_root, struct TreeNode *tree_root){
+	
+
+
+
+}
 
 
 
@@ -79,9 +88,19 @@ const char* huffman_encode(const char *to_encode, struct TreeNode *tree_root){
 		linked_list_append(to_encode[i], linked_list_root);
 	}
 
+	// printf("Before sorting\n");
+	// for(struct LinkedListNode *temp = linked_list_root ; temp != NULL ; temp = temp->next){
+	// 	printf("%s -> %d\n",temp->letter, temp->count);
+	// }
+
 	linked_list_order(linked_list_root);
 
-	create_tree();
+	// printf("\nAfter sorting\n");
+	// for(struct LinkedListNode *temp = linked_list_root ; temp != NULL ; temp = temp->next){
+	// 	printf("%s -> %d\n",temp->letter, temp->count);
+	// }
+
+	create_tree(linked_list_root, tree_root);
 
 
 	/*
@@ -124,7 +143,7 @@ int main(void){
     */
 	
 	printf("sizeof struct TreeNode = %zu\n",sizeof(struct TreeNode));
-	const char *encoded_text = huffman_encode("bacbccabac", tree_root);
+	const char *encoded_text = huffman_encode("A_DEAD_DAD_CEDED_A_BAD_BABE_A_BEADED_ABACA_BED", tree_root);
     // printf("return from to encode = %d", );
 
 
