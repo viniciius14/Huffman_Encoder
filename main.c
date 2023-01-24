@@ -15,6 +15,7 @@ struct TreeNode{
 struct LinkedListNode{
 	struct LinkedListNode *next;
 	struct LinkedListNode *prev;
+	struct TreeNode		  *tree;
 	char 				  *letter;
 	uint8_t 			   count;
 };
@@ -72,11 +73,7 @@ void linked_list_order(struct LinkedListNode *list_root){
 	}
 }
 
-// struct TreeNode{
-// 	struct TreeNode *left; 	// 0
-// 	struct TreeNode *right; // 1
-// 	char            *letters;
-// };
+
 struct TreeNode *convert_to_tree(struct LinkedListNode *node){
 	struct TreeNode *new = calloc(1, sizeof(struct TreeNode));
 	strcpy(new->letters, node->letter);
@@ -106,10 +103,23 @@ void add_tree_parent(struct TreeNode *tree_root, struct LinkedListNode *first, s
 }
 
 
-
+// struct TreeNode{
+// 	struct TreeNode *left; 	// 0
+// 	struct TreeNode *right; // 1
+// 	char            *letters;
+//	
+// };
 
 void create_tree(struct LinkedListNode *list_root, struct TreeNode *tree_root){
 	struct LinkedListNode *list_pt = list_root;
+	
+	/*
+		if we cant add straight away to the tree
+		add to the tree* pointer in the linked list
+		means will have to check everytime if tree* is NULL 
+	*/
+	
+	
 	while(list_pt != NULL){
 		if(tree_root->letters == NULL){
 			tree_root->letters = list_pt->letter;
