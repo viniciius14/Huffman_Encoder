@@ -5,20 +5,30 @@
 
 
 
-struct TreeNode{
-	struct TreeNode *left; 	// 0
-	struct TreeNode *right; // 1
-	char            *letters;
-	unsigned char 	 count;
-};
-
 struct LinkedListNode{
 	struct LinkedListNode *next;
 	struct LinkedListNode *prev;
-	struct TreeNode		  *tree;
+	// struct TreeNode		  *tree;
 	char 				  *letter;
 	uint8_t 			   count;
 };
+
+struct TreeNode{
+	struct TreeNode *right;
+	struct TreeNode *left;
+
+	struct LinkedListNode *right_node;
+	struct LinkedListNode *left_node;
+};
+
+// struct TreeNode{
+// 	struct TreeNode *left; 	// 0
+// 	struct TreeNode *right; // 1
+// 	char            *letters;
+// 	unsigned char 	 count;
+// };
+
+
 
 void linked_list_append(char letter_to_add, struct LinkedListNode *list_root){
 	struct LinkedListNode *temp = list_root;
@@ -48,7 +58,7 @@ void linked_list_append(char letter_to_add, struct LinkedListNode *list_root){
 	}while(temp != NULL);
 }
 
-void swap_contents(struct LinkedListNode *a, struct LinkedListNode *b){
+void linked_list_swap_contents(struct LinkedListNode *a, struct LinkedListNode *b){
 	char *letter = a->letter;
 	unsigned char count = a->count;
 
@@ -68,7 +78,7 @@ void linked_list_order(struct LinkedListNode *list_root){
 			min = temp2->count < min->count ? temp2 : min;
 		}
 
-		if(min != temp1)swap_contents(min, temp1);
+		if(min != temp1)linked_list_swap_contents(min, temp1);
 		min = NULL;
 	}
 }
